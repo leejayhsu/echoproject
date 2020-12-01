@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"echoproject/models"
+	"echoproject/types"
 	"net/http"
 
 	"github.com/labstack/echo"
@@ -8,5 +10,8 @@ import (
 
 // GetCustomer creates a customer
 func GetCustomer(c echo.Context) error {
-	return c.String(http.StatusOK, "ok")
+	customerID := c.Param("customerID")
+	var customer types.Customer
+	models.DB.Where("customer_id = ?", customerID).First(&customer)
+	return c.JSONPretty(http.StatusOK, customer, "  ")
 }

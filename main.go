@@ -28,8 +28,8 @@ func main() {
 
 	e := echo.New()
 	e.POST("/customers", handlers.CreateCustomer)
-	e.GET("/customers/:custID", handlers.GetCustomer)
-	e.PATCH("/customers/:custID", handlers.UpdateCustomer)
-	e.DELETE("/customers/:custID", handlers.DeleteCustomer)
+	e.GET("/customers/:customerID", handlers.GetCustomer)
+	e.PATCH("/customers/:customerID", handlers.UpdateCustomer)
+	e.DELETE("/customers/:customerID", handlers.DeleteCustomer)
 	e.Logger.Fatal(e.Start("localhost:5000"))
 }

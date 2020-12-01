@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"echoproject/models"
+	"echoproject/types"
 	"log"
 	"net/http"
 
@@ -9,18 +10,10 @@ import (
 	"github.com/labstack/echo"
 )
 
-// Customer is a customer
-type Customer struct {
-	CustomerID string `json:"customer_id"`
-	FirstName  string `json:"first_name"`
-	LastName   string `json:"last_name"`
-	DOB        string `json:"dob"`
-}
-
 // CreateCustomer creates a customer
 func CreateCustomer(c echo.Context) error {
 	customerID := uuid.New().String()
-	customer := new(Customer)
+	customer := new(types.Customer)
 	if err := c.Bind(customer); err != nil {
 		return err
 	}
