@@ -28,13 +28,13 @@ type Customer struct {
 	Base
 }
 
-// BeforeCreate will set a UUID rather than numeric ID.
+// BeforeCreate will generate a UUID rather than numeric ID.
 func (b *Base) BeforeCreate(tx *gorm.DB) (err error) {
 	b.UUID = uuid.New()
 	return
 }
 
-// BeforeSave will set a CustomerID uuid
+// BeforeSave will generate a CustomerID uuid
 func (c *Customer) BeforeSave(tx *gorm.DB) (err error) {
 	log.Println("executing BeforeSave hook")
 	c.CustomerID = uuid.New()
