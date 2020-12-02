@@ -3,6 +3,7 @@ package main
 import (
 	berrors "echoproject/errors"
 	"echoproject/handlers"
+	"echoproject/middleware"
 	"echoproject/models"
 	"errors"
 	"net/http"
@@ -10,6 +11,7 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo"
+	"github.com/labstack/gommon/log"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -34,6 +36,12 @@ func main() {
 	// a custom error handler
 	e.HTTPErrorHandler = customHTTPErrorHandler
 
+	// register middleware
+	e.Use(middleware.Auth)
+
+	// set minimum log level (default is error)
+	e.Logger.SetLevel(log.DEBUG)
+
 	e.POST("/customers", handlers.CreateCustomer)
 	e.GET("/customers/:customerID", handlers.GetCustomer)
 	e.PATCH("/customers/:customerID", handlers.UpdateCustomer)
@@ -55,6 +63,7 @@ func customHTTPErrorHandler(err error, c echo.Context) {
 	}
 
 	code := http.StatusInternalServerError
+
 	// check if error is an echo HTTPError
 	if he, ok := err.(*echo.HTTPError); ok {
 		code = he.Code
