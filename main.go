@@ -50,15 +50,17 @@ func customHTTPErrorHandler(err error, c echo.Context) {
 		Message string
 		Code    int
 		Status  string
-		Kind    string `json:"-"`
-		Extra   map[string](string)
+		Kind    string
+		Extra   map[string](string) `json:"-"`
 	}
 
 	code := http.StatusInternalServerError
 	// check if error is an echo HTTPError
 	if he, ok := err.(*echo.HTTPError); ok {
 		code = he.Code
-		c.JSON(code, "bond error not raised")
+		message := he.Message.(string)
+		r := response{Message: message, Code: 500, Status: "unknown error", Kind: "server error"}
+		c.JSON(code, r)
 	}
 
 	if be, ok := err.(*berrors.BError); ok {
@@ -76,7 +78,7 @@ func testError(c echo.Context) error {
 func testError2(c echo.Context) error {
 	extra := map[string](string){"status": "this is an extra"}
 	err := &berrors.BError{
-		Message: "this is a bond error",
+		Message: "this is a BError",
 		Code:    424,
 		Status:  "custom error",
 		Kind:    "server error",

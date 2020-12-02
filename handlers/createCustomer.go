@@ -13,6 +13,9 @@ func CreateCustomer(c echo.Context) error {
 	if err := c.Bind(customer); err != nil {
 		return err
 	}
-	models.DB.Model(&models.Customer{}).Create(&customer)
+	result := models.DB.Model(&models.Customer{}).Create(&customer)
+	if result.Error != nil {
+		return result.Error
+	}
 	return c.JSONPretty(http.StatusCreated, customer, "  ")
 }
