@@ -49,5 +49,13 @@ func main() {
 	e.POST("/e", handlers.TestError)
 	e.POST("/e2", handlers.TestError2)
 
-	e.Logger.Fatal(e.Start("localhost:8000"))
+	var a string
+	if os.Getenv("B_ENV") == "local" {
+		// this is really just for mac's to avoid
+		// annoying prompt to allow network connection for go app
+		a = "localhost:8000"
+	} else {
+		a = ":8000"
+	}
+	e.Logger.Fatal(e.Start(a))
 }
