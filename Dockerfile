@@ -28,8 +28,9 @@ WORKDIR /app/
 # Copy the Pre-built binary file from the previous stage
 COPY --from=builder /app/main .
 
-# Expose port 8000
-EXPOSE 8000
+# Expose port 5000
+EXPOSE 5000
+
 
 # Run Executable
-CMD ["./main"]
+CMD ["./wait-for-postgres.sh", "./main"]

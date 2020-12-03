@@ -7,6 +7,7 @@ import (
 	"echoproject/models"
 	"errors"
 	"net/http"
+	"os"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo"
@@ -17,18 +18,11 @@ import (
 
 func main() {
 	godotenv.Load()
-	// dsn := "host=" + os.Getenv("POSTGRES_HOST") +
-	// 	" user=" + os.Getenv("POSTGRES_USER") +
-	// 	" password=" + os.Getenv("POSTGRES_PASSWORD") +
-	// 	" dbname=" + os.Getenv("POSTGRES_DB") +
-	// 	" port=" + os.Getenv("POSTGRES_PORT") +
-	// 	" sslmode=disable TimeZone=America/Los_Angeles"
-
-	dsn := "host=127.0.0.1" +
-		" user=postgres" +
-		" password=leejay" +
-		" dbname=echo" +
-		" port=5432" +
+	dsn := "host=" + os.Getenv("POSTGRES_HOST") +
+		" user=" + os.Getenv("POSTGRES_USER") +
+		" password=" + os.Getenv("POSTGRES_PASSWORD") +
+		" dbname=" + os.Getenv("POSTGRES_DB") +
+		" port=" + os.Getenv("POSTGRES_PORT") +
 		" sslmode=disable TimeZone=America/Los_Angeles"
 	var err error
 	models.DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
