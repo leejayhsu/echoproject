@@ -1,7 +1,8 @@
 # echoproject
- simple API built with echo, gorm
+simple API built with `echo` and `gorm`.
 
-### running go app
+### compile and run go app
+#### env setup
 you'll need to have a postgres instance running (docker container or otherwise), and set these env vars:
 ```sh
 POSTGRES_HOST=<your_postgres_host>
@@ -12,8 +13,7 @@ POSTGRES_PASSWORD=<your_postgres_password>
 B_ENV=local
 ```
 `B_ENV` is an env var to tell the go app that you are running the app locally, and the only reason for this is to set the echo domain to "localhost" so that OSX doesn't ask you for network permissions everytime you compile the app.
-
-To start the app, do:
+#### start app
 ```sh
 go run main.go
 ```
