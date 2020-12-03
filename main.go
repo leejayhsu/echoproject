@@ -5,8 +5,6 @@ import (
 	"echoproject/handlers"
 	"echoproject/middleware"
 	"echoproject/models"
-	"errors"
-	"net/http"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -34,7 +32,7 @@ func main() {
 	e := echo.New()
 
 	// a custom error handler
-	e.HTTPErrorHandler = customHTTPErrorHandler
+	e.HTTPErrorHandler = berrors.CustomHTTPErrorHandler
 
 	// register middleware
 	e.Use(middleware.Auth)
@@ -47,51 +45,9 @@ func main() {
 	e.PATCH("/customers/:customerID", handlers.UpdateCustomer)
 	e.DELETE("/customers/:customerID", handlers.DeleteCustomer)
 
-	e.POST("/e", testError)
-	e.POST("/e2", testError2)
+	// for debugging and stuff
+	e.POST("/e", handlers.TestError)
+	e.POST("/e2", handlers.TestError2)
 
-	e.Logger.Fatal(e.Start("localhost:5000"))
-}
-
-func customHTTPErrorHandler(err error, c echo.Context) {
-	type response struct {
-		Message string
-		Code    int
-		Status  string
-		Kind    string
-		Extra   map[string](string) `json:"-"`
-	}
-
-	code := http.StatusInternalServerError
-
-	// check if error is an echo HTTPError
-	if he, ok := err.(*echo.HTTPError); ok {
-		code = he.Code
-		message := he.Message.(string)
-		r := response{Message: message, Code: 500, Status: "unknown error", Kind: "server error"}
-		c.JSON(code, r)
-	}
-
-	if be, ok := err.(*berrors.BError); ok {
-		c.JSON(be.Code, be)
-	}
-	c.Logger().Error(err)
-
-}
-
-func testError(c echo.Context) error {
-	err := errors.New("asdf")
-	return err
-}
-
-func testError2(c echo.Context) error {
-	extra := map[string](string){"status": "this is an extra"}
-	err := &berrors.BError{
-		Message: "this is a BError",
-		Code:    424,
-		Status:  "custom error",
-		Kind:    "server error",
-		Extra:   extra,
-	}
-	return err
+	e.Logger.Fatal(e.Start("localhost:8000"))
 }

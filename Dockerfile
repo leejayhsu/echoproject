@@ -3,15 +3,13 @@ FROM golang:1.15-alpine3.12 as builder
 
 RUN apk add git
 
-# Add Maintainer Info
-LABEL maintainer="<>"
-
 RUN mkdir /app
 ADD . /app
 WORKDIR /app
 
 # Download all the dependencies
 COPY go.mod go.sum ./
+
 RUN go mod download
 COPY . .
 
@@ -27,10 +25,11 @@ WORKDIR /app/
 
 # Copy the Pre-built binary file from the previous stage
 COPY --from=builder /app/main .
+COPY wait-for-postgres.sh .
+COPY wait-for .
 
-# Expose port 5000
-EXPOSE 5000
+EXPOSE 8000
 
 
 # Run Executable
-CMD ["./wait-for-postgres.sh", "./main"]
+# CMD ["./wait-for-postgres.sh", "./main"]
