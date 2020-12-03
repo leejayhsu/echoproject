@@ -25,7 +25,6 @@ WORKDIR /app/
 
 # Copy the Pre-built binary file from the previous stage
 COPY --from=builder /app/main .
-COPY wait-for-postgres.sh .
 COPY wait-for .
 
 EXPOSE 8000
