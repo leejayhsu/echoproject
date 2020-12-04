@@ -27,7 +27,7 @@ func main() {
 	if err != nil {
 		panic("failed to connect database")
 	}
-	models.DB.AutoMigrate(&models.Customer{})
+	models.DB.AutoMigrate(&models.Customer{}, &models.Address{})
 
 	e := echo.New()
 

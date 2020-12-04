@@ -12,14 +12,10 @@ func Auth(next echo.HandlerFunc) echo.HandlerFunc {
 
 		c.Logger().Info("in auth middleware")
 
-		i := c.Request().Header.Get("Identity")
-		a := c.Request().Header.Get("Authorization")
+		k := c.Request().Header.Get("X-Api-Key")
 
-		if i != "A" {
+		if k != "A" {
 			return echo.NewHTTPError(http.StatusUnauthorized, "unauthenticated")
-		}
-		if a != "A" {
-			return echo.NewHTTPError(http.StatusForbidden, "unauthorized")
 		}
 
 		// if auth passed, call next
