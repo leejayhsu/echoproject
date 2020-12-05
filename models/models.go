@@ -1,7 +1,6 @@
 package models
 
 import (
-	"log"
 	"time"
 
 	"github.com/google/uuid"
@@ -25,8 +24,7 @@ type Customer struct {
 	FirstName  string    `json:"first_name"`
 	LastName   string    `json:"last_name"`
 	DOB        string    `json:"dob"`
-	// Addresses  []Address `gorm:"foreignKey:CustomerID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;" json:"addresses"`
-	Addresses []Address `gorm:"foreignKey:CustomerID;references:CustomerID;" json:"addresses"`
+	Addresses  []Address `gorm:"foreignKey:CustomerID;references:CustomerID;" json:"addresses"`
 	Base
 }
 
@@ -57,25 +55,6 @@ func (a *Address) BeforeCreate(tx *gorm.DB) (err error) {
 
 // BeforeCreate will generate a CustomerID uuid
 func (c *Customer) BeforeCreate(tx *gorm.DB) (err error) {
-	// log.Debug("In the customer constructor")
-	log.Println("In the customer constructor")
 	c.CustomerID = uuid.New()
-	return
-}
-
-// BeforeDelete soft deletes addresses
-func (c *Customer) BeforeDelete(tx *gorm.DB) (err error) {
-	log.Println("In the customer delete hook")
-	// it's just print zero values...
-	log.Println(c)
-	log.Println(c.FirstName)
-	log.Println("done printing")
-	// if result := tx.Model(&Address{}).Where("customer_id = ?", c.CustomerID).Update("street1", "deleted!"); result.Error != nil {
-	// 	log.Println(result.Error)
-	// }
-	// tx.Model(&Customer{}).Where("customer_id = ?", c.CustomerID).Update("first_name", "this was modified by the delete hook")
-	// c.FirstName = "deleted by hook"
-	// DB.Model(&Address{}).Where("customer_id = ?", c.CustomerID).Update("street1", "deleted")
-
 	return
 }
